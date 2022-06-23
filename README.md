@@ -4,6 +4,8 @@
 
 Foi desenvolvido um sistema por uma empresa parceira foursys, porém o contrato foi rompido e agora os funcionários da foursys irão se encarregar de completar o desenvolvimento do software. Foram abertos chamados de erros e validações no sistemas também para serem consertados.
 
+![alt text](https://github.com/urielcaire/learnmd/blob/master/imgs/solaire.gif "Praise the sun!")
+
 ## Objetivos
 
 1. Verificar se há erro: Rode o projeto em sua máquina e verifique se o erro realmente está
@@ -19,7 +21,7 @@ passo a passo que foi feito.
 
 ## Requisitos
 
-1. Menu para criação de produtos pelo chefe de seção.
+1. ~~Menu para criação de produtos pelo chefe de seção.~~
 
 2. Apenas o chefe da seção pode alterar estoque e preço do produto.
 
