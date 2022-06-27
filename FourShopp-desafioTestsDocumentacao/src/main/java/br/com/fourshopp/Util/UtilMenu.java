@@ -83,7 +83,7 @@ public class UtilMenu {
         Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
         fontTitle.setSize(18);
 
-        Image image1 = Image.getInstance("src/main/java/br/com/fourshopp/service/fourshopp.png");
+        Image image1 = Image.getInstance("C:\\Users\\mesteves\\Documents\\fourcamp\\java\\fourshopp_squad3\\FourShopp-desafioTestsDocumentacao\\src\\main\\java\\br\\com\\fourshopp\\service\\fourshopp.png");
         image1.scaleAbsolute(140f, 140f);
         image1.setAlignment(Element.ALIGN_CENTER);
 
