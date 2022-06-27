@@ -31,7 +31,7 @@ passo a passo que foi feito.
 
 5. Administrador pode demitir funcionário e tirá-lo da lista de funcionários do chefe.
 
-6. Chefes de seção podem cadastrar seus operadores e definir carga horária.
+6. ~~Chefes de seção podem cadastrar seus operadores e definir carga horária.~~
 
 ## Chamados para correções
 
