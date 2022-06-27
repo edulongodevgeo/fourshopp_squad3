@@ -64,11 +64,12 @@ public class FourShoppApplication implements CommandLineRunner {
 			String cpf = scanner.next();
 			System.out.println("Insira sua senha: ");
 			String password = scanner.next();
+		try {
 			this.cliente = clienteService.loadByEmailAndPassword(cpf, password)
 					.orElseThrow(() -> new ObjectNotFoundException(1L, "Cliente"));
-			if (cliente == null) {
-				System.err.println("Usuario não encontrado !");
-				menuInicial(4);
+			}catch (ObjectNotFoundException e) {
+				System.err.println("Usuario não encontrado. Faça o cadastro do cliente!");
+				menuInicial(3);
 			}
 
 			int contador = 1;
@@ -119,27 +120,15 @@ public class FourShoppApplication implements CommandLineRunner {
 
 			System.out.println("Insira sua password: ");
 			String password = scanner.next();
-
+		try {
 			Optional<Funcionario> admnistrador = this.funcionarioService.loadByEmailAndPassword(cpf, password);
-
 			if (admnistrador.get().getCargo() != Cargo.ADMINISTRADOR) {
-				System.out.println("Administrador nao encontrado");
-				menuInicial(2);
-			} else {
-				System.out.println("1- Cadastrar funcionários " + "\n2- Cadastrar Operador");
-				int escolhaAdm = scanner.nextInt();
-				if (escolhaAdm == 1) {
-					cadastrarFuncionario(scanner);
-					System.out.println("Funcionário cadastrado com sucesso");
-				} else if (escolhaAdm == 2) {
-					UtilMenu.menuCadastrarOperador(scanner);
-					System.out.println("Operador cadastrado com sucesso");
-
-				} else
-					System.out.println("Opção inválida");
-
 			}
-
+		}
+			catch(Exception e){
+				System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
+				menuInicial(5);
+			}
 		}
 
 		if (opcao == 3) {
@@ -193,6 +182,10 @@ public class FourShoppApplication implements CommandLineRunner {
 //				Optional<Operador> operador = this.operadorService.loadByEmailAndPassword(cpf, password);
 //			}
 			}
+		}
+		if (opcao == 5) {
+			System.out.println("Fechando a aplicação...");
+			System.exit(0);
 		}
 
 	}
