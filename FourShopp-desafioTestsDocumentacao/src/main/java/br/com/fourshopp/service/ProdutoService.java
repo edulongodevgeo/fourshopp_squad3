@@ -2,6 +2,7 @@ package br.com.fourshopp.service;
 
 import br.com.fourshopp.entities.Produto;
 import br.com.fourshopp.repository.ProdutoRepository;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,11 @@ public class ProdutoService {
     public void diminuirEstoque(int quantidade, Produto produto){
         produto.setQuantidade(produto.getQuantidade() - quantidade);
         produtoRepository.save(produto);
+    }
+    public boolean confereEstoque(int quantidade, Produto produto) {
+        if (produto.getQuantidade() >= quantidade) {
+        return true;
+        }
+        return false;
     }
 }
