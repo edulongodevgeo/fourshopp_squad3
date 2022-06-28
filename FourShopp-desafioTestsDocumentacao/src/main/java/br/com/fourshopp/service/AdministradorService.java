@@ -33,7 +33,7 @@ public class AdministradorService {
     }
 
     public Optional<Administrador>loadByCpfAndPassword(String cpf, String password){
-        return Optional.ofNullable(administradorRepository.findByCpfAndPassword(cpf, password));
+        return Optional.ofNullable(administradorRepository.findByCpfAndSenha(cpf, password));
     }
 
 
