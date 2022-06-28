@@ -39,9 +39,9 @@ passo a passo que foi feito.
 
 2. ~~Senha maior ou igual a 8 caracteres.~~ (REVISAR PR)
 
-3. O sistema se encontra sem tratamentos de exceções, ou seja, em campo que
+3. ~~O sistema se encontra sem tratamentos de exceções, ou seja, em campo que
 aceita apenas números , caso o usuário digite uma letra, o sistema encerra com
-erro.
+erro.~~
 
 4. ~~O cliente NÃO pode levar item em quantidade superior ao estoque.~~
 
