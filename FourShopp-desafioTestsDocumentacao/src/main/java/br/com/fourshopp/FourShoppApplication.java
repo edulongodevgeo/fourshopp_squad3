@@ -2,12 +2,12 @@ package br.com.fourshopp;
 
 import br.com.fourshopp.Util.UtilMenu;
 import br.com.fourshopp.entities.*;
+import br.com.fourshopp.repository.ChefeRepository;
+import br.com.fourshopp.repository.FuncionarioRepository;
 import br.com.fourshopp.repository.ProdutoRepository;
-import br.com.fourshopp.service.ClienteService;
-import br.com.fourshopp.service.FuncionarioService;
-import br.com.fourshopp.service.OperadorService;
-import br.com.fourshopp.service.ProdutoService;
+import br.com.fourshopp.service.*;
 import ch.qos.logback.classic.pattern.Util;
+import br.com.fourshopp.entities.Administrador;
 
 import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.hibernate.ObjectNotFoundException;
@@ -29,6 +29,8 @@ public class FourShoppApplication implements CommandLineRunner {
 	Scanner scanner = new Scanner(System.in);
 
 	@Autowired
+	private AdministradorService administradorService;
+	@Autowired
 	private ClienteService clienteService;
 
 	@Autowired
@@ -39,6 +41,9 @@ public class FourShoppApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private ChefeRepository chefeRepository;
 
 	@Autowired
 	private FuncionarioService funcionarioService;
@@ -123,6 +128,14 @@ public class FourShoppApplication implements CommandLineRunner {
 		}
 
 		if (opcao == 2) {
+
+			Administrador administrador = new Administrador("987654321", "12345678");
+			if (administradorService.findAll().size() == 0) {
+				administradorService.save(administrador);
+			}
+
+			System.out.println(administrador.toString());
+
 			System.out.println("INTRANET FOURSHOPP....");
 
 			System.out.println("Insira as credenciais do usuário administrador: ");
@@ -133,14 +146,37 @@ public class FourShoppApplication implements CommandLineRunner {
 			System.out.println("Insira sua password: ");
 			String password = scanner.next();
 		try {
-			Optional<Funcionario> admnistrador = this.funcionarioService.loadByEmailAndPassword(cpf, password);
-			if (admnistrador.get().getCargo() != Cargo.ADMINISTRADOR) {
+			Administrador admnistrador = this.administradorService.loadByCpfAndPassword(cpf, password).orElseThrow(() -> new Exception("Usuario não encontrado"));
+			if (admnistrador != null) {
+				System.out.println("Bem-vindo administrador!");
+				System.out.println(administrador.toString());
+				
+				//método para criar o chefe
+				// Criar uma streing (sysout) fizendo que ele pode criar o chefe...
+				Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
+				this.chefeRepository.save(chefe);
+				ChefeService chefeService = new ChefeService();
+				//chefeService.save(chefe);
+				System.out.println(chefe.toString());
+				
+				//método para demitir (deletar) funcionário
+				System.out.println("Digite o id do funcionário que será desligado: ");
+				Long idFuncionario = scanner.nextLong();
+				operadorService.remove(idFuncionario);
+				
+				System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
+				
+				
 			}
+
 		}
 			catch(Exception e){
+				e.printStackTrace();
 				System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
 				menuInicial(5);
 			}
+		
+
 		}
 
 		if (opcao == 3) {

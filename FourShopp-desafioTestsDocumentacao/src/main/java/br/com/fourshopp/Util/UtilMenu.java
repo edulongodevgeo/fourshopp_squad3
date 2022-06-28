@@ -289,6 +289,74 @@ public class UtilMenu {
 
 		return new Operador(nome, email, celular, password, cpf, new Endereco(), data, Cargo.OPERADOR, salario);
 	}
+	
+	//METODO CADASTRAR CHEFE
+	public static Chefe menuCadastrarChefe(Scanner scanner) throws ParseException {
+		
+		scanner.nextLine();
+		System.out.println("Insira seu nome: ");
+		String nome = scanner.nextLine();
+
+		System.out.println("Insira seu email: ");
+		String email = scanner.nextLine();
+
+		System.out.println("Insira seu celular: ");
+		String celular = scanner.nextLine();
+
+		System.out.println("Insira uma senha: ");
+		String password = scanner.nextLine();
+		
+		while (password.length() < 8) {
+			if (password.length() < 8) {
+				System.out.println("A senha deve conter 8 caracteres ou mais. Tente novamente! ");
+				System.out.println("Insira uma senha: ");
+				password = scanner.nextLine();
+			} else {
+				scanner.close();
+			}
+		}
+		
+		System.out.println("Insira seu cpf: ");
+		String cpf = scanner.nextLine();
+		while (cpf.length() != 11) {
+			if (cpf.length() < 11) {
+				System.out.println("O CPF esta Incorreto. Tente novamente! ");
+			} else {
+				System.out.println("O CPF esta Incorreto. Tente novamente");
+			}
+			System.out.println("O CPF deve ter tamanho de 11 caracteres");
+			System.out.println("Insira o CPF:");
+			cpf = scanner.nextLine();
+		}
+
+		System.out.println("Insira sua rua: ");
+		String rua = scanner.nextLine();
+
+		System.out.println("Insira seu cidade: ");
+		String cidade = scanner.nextLine();
+
+		System.out.println("Insira seu bairro: ");
+		String bairro = scanner.nextLine();
+		
+
+		System.out.println("Insira seu numero: ");
+		int numero = scanner.nextInt();
+		scanner.nextLine();
+		System.out.println("Data de contratação: ");
+		String hireDate = scanner.nextLine();
+
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+		Date data = formato.parse(hireDate);
+
+		System.out.println("Insira o salário CLT bruto: ");
+		double salario = scanner.nextDouble();
+
+		Endereco endereco = new Endereco(rua, cidade, bairro, numero);
+		
+		return new Chefe(nome, email, celular, password, cpf, endereco, data, Cargo.CHEFE_SECAO, Setor.BAZAR, salario);
+		
+		//Se der certo, voltar uma mensagem de positivo, e retornar para o menu.
+	}
 
 	public static Produto menuCadastrarProduto(Scanner scanner) throws ParseException {
 		scanner.nextLine();
