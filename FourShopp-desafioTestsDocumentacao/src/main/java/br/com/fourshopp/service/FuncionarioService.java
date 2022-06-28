@@ -1,9 +1,7 @@
 package br.com.fourshopp.service;
 
-import br.com.fourshopp.entities.Cliente;
 import br.com.fourshopp.entities.Funcionario;
 import br.com.fourshopp.repository.FuncionarioRepository;
-import br.com.fourshopp.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -45,5 +43,9 @@ public class FuncionarioService {
 
     public Optional<Funcionario> loadByEmailAndPassword(String cpf, String password){
         return funcionarioRepository.findByCpfAndPassword(cpf,password);
+    }
+
+    public Funcionario save(Funcionario funcionario){
+        return funcionarioRepository.save(funcionario);
     }
 }

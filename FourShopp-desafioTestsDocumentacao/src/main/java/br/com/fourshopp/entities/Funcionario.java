@@ -21,8 +21,7 @@ public class Funcionario extends Pessoa implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "dt_hireDate")
     private Date dataContratacao;
-
-    @Column(name = "ds_cargo")
+    @Column(name = "ds_cargo") @Enumerated(EnumType.STRING)
     private Cargo cargo;
 
     @Column(name = "ds_setor")
