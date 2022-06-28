@@ -5,9 +5,11 @@ import br.com.fourshopp.entities.Operador;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface OperadorRespository extends JpaRepository<Operador, Long> {
 
     @Query("Select c From Pessoa c where c.cpf = ?1 and c.password = ?2")

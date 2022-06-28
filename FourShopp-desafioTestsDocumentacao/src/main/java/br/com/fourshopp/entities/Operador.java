@@ -47,4 +47,11 @@ public class Operador  extends Pessoa {
         this.salario = salario;
         this.cargaHoraria = cargaHoraria;
     }
+
+	@Override
+	public String toString() {
+		return "Operador [dataContratacao=" + dataContratacao + ", cargo=" + cargo + ", salario=" + salario
+				+ ", cargaHoraria=" + cargaHoraria + ", funcionario=" + funcionario + "]";
+	}
+    
 }
