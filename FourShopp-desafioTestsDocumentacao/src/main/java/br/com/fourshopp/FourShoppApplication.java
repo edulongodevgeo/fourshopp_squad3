@@ -9,6 +9,7 @@ import br.com.fourshopp.service.*;
 import ch.qos.logback.classic.pattern.Util;
 import br.com.fourshopp.entities.Administrador;
 
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -84,9 +85,12 @@ public class FourShoppApplication implements CommandLineRunner {
 
 				List<Produto> collect = produtoService.listaProdutosPorSetor(setor).stream()
 						.filter(x -> x.getSetor() == setor).collect(Collectors.toList());
+
 				collect.forEach(produto -> {
-					System.out.println(produto.getId() + "- " + produto.getNome() + " Preço: " + produto.getPreco()
-							+ " Estoque - " + produto.getQuantidade());
+					if (produto.getQuantidade() > 0) {
+						System.out.println(produto.getId() + "- " + produto.getNome() + " Preço: " + produto.getPreco()
+								+ " Estoque - " + produto.getQuantidade());
+					}
 				});
 
 				System.out.println("Informe o número do produto desejado: ");
@@ -94,23 +98,31 @@ public class FourShoppApplication implements CommandLineRunner {
 
 				System.out.println("Escolha a quantidade");
 				int quantidade = scanner.nextInt();
+				Produto byId = produtoService.findById(produto);
+				if (produtoService.confereEstoque(quantidade, byId) == false) {
+					System.err.println("Estoque indisponivel");
+					break;
+				}
+
 
 				// Atualiza estoque
-				Produto foundById = produtoService.findById(produto);
-				produtoService.diminuirEstoque(quantidade, foundById);
+					Produto foundById = produtoService.findById(produto);
+				if (foundById.getQuantidade() - quantidade >= 0) {
+					produtoService.diminuirEstoque(quantidade, foundById);
 
-				Produto clone = foundById.clone();
-				System.out.println(clone.toString());
-				clone.getCalculaValor(quantidade, clone);
-				cliente.getProdutoList().add(clone);
-				System.out.println("Deseja outro produto S/N ?");
-				String escolha = scanner.next();
+					Produto clone = foundById.clone();
+					System.out.println(clone.toString());
+					clone.getCalculaValor(quantidade, clone);
+					cliente.getProdutoList().add(clone);
+					System.out.println("Deseja outro produto S/N ?");
+					String escolha = scanner.next();
 
-				if (!escolha.equalsIgnoreCase("S")) {
-					contador = 2;
-					gerarCupomFiscal(cliente);
-					System.out.println("Gerando nota fiscal...");
-					System.err.println("Fechando a aplicação...");
+					if (!escolha.equalsIgnoreCase("S")) {
+						contador = 2;
+						gerarCupomFiscal(cliente);
+						System.out.println("Gerando nota fiscal...");
+						System.err.println("Fechando a aplicação...");
+					} else System.out.println("Encerrando sistema.");
 				}
 			}
 		}

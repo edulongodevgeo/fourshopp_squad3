@@ -91,7 +91,20 @@ public class UtilMenu {
 	}
 
 	public static void gerarCupomFiscal(Cliente cliente) throws IOException {
+		Double totalMercearia = 0.0;
 		List<Produto> produtos = cliente.getProdutoList();
+		for (Produto item: produtos) {
+			if (item.getSetor() == Setor.MERCEARIA.getCd());{
+				totalMercearia += item.getPreco()*item.getQuantidade();
+			}
+		}
+		for (Produto item: produtos) {
+			if (item.getSetor() == Setor.MERCEARIA.getCd());{
+				if(totalMercearia >= 500.0){
+					item.setPreco(item.getPreco()*0.90);
+				}
+			}
+		}
 		Document document = new Document(PageSize.A4);
 		File file = new File("CupomFiscal_" + new Random().nextInt() + ".pdf");
 		String absolutePath = file.getAbsolutePath();
@@ -102,7 +115,7 @@ public class UtilMenu {
 		fontTitle.setSize(18);
 
 		Image image1 = Image.getInstance(
-				"C:\\Users\\mesteves\\Documents\\fourcamp\\java\\fourshopp_squad3\\FourShopp-desafioTestsDocumentacao\\src\\main\\java\\br\\com\\fourshopp\\service\\fourshopp.png");
+				"C:\\Users\\pbrito\\Documents\\GitHub\\fourshopp_squad3\\FourShopp-desafioTestsDocumentacao\\src\\main\\java\\br\\com\\fourshopp\\service\\fourshopp.png");
 		image1.scaleAbsolute(140f, 140f);
 		image1.setAlignment(Element.ALIGN_CENTER);
 
@@ -346,6 +359,7 @@ public class UtilMenu {
 	}
 
 	public static Produto menuCadastrarProduto(Scanner scanner) throws ParseException {
+		scanner.nextLine();
 		System.out.println("Nome do produto: ");
 		String nome = scanner.nextLine();
 
