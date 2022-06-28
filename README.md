@@ -27,7 +27,7 @@ passo a passo que foi feito.
 
 3. Apenas o chefe da seção pode excluir os produtos.
 
-4. Administrador pode cadastrar novos chefes.
+4. ~~Administrador pode cadastrar novos chefes.~~
 
 5. Administrador pode demitir funcionário e tirá-lo da lista de funcionários do chefe.
 
@@ -43,7 +43,7 @@ passo a passo que foi feito.
 aceita apenas números , caso o usuário digite uma letra, o sistema encerra com
 erro.
 
-4. O cliente NÃO pode levar item em quantidade superior ao estoque.
+4. ~~O cliente NÃO pode levar item em quantidade superior ao estoque.~~
 
-5. O cliente deverá ter um desconto de 10% a cada 500$ reais em compras
-APENAS de mercearia.
+5. ~~O cliente deverá ter um desconto de 10% a cada 500$ reais em compras
+APENAS de mercearia.~~
