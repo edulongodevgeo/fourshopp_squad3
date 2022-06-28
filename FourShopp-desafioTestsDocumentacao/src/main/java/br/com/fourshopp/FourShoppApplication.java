@@ -3,11 +3,9 @@ package br.com.fourshopp;
 import br.com.fourshopp.Util.UtilMenu;
 import br.com.fourshopp.entities.*;
 import br.com.fourshopp.repository.ProdutoRepository;
-import br.com.fourshopp.service.ClienteService;
-import br.com.fourshopp.service.FuncionarioService;
-import br.com.fourshopp.service.OperadorService;
-import br.com.fourshopp.service.ProdutoService;
+import br.com.fourshopp.service.*;
 import ch.qos.logback.classic.pattern.Util;
+import br.com.fourshopp.entities.Administrador;
 
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,8 @@ public class FourShoppApplication implements CommandLineRunner {
 
 	Scanner scanner = new Scanner(System.in);
 
+	@Autowired
+	private AdministradorService administradorService;
 	@Autowired
 	private ClienteService clienteService;
 
@@ -111,6 +111,14 @@ public class FourShoppApplication implements CommandLineRunner {
 		}
 
 		if (opcao == 2) {
+
+			Administrador administrador = new Administrador("987654321", "12345678");
+			if (administradorService.findAll().size() == 0) {
+				administradorService.save(administrador);
+			}
+
+			System.out.println(administrador.toString());
+
 			System.out.println("INTRANET FOURSHOPP....");
 
 			System.out.println("Insira as credenciais do usuário administrador: ");
@@ -121,11 +129,15 @@ public class FourShoppApplication implements CommandLineRunner {
 			System.out.println("Insira sua password: ");
 			String password = scanner.next();
 		try {
-			Optional<Funcionario> admnistrador = this.funcionarioService.loadByEmailAndPassword(cpf, password);
-			if (admnistrador.get().getCargo() != Cargo.ADMINISTRADOR) {
+			Administrador admnistrador = this.administradorService.loadByCpfAndPassword(cpf, password).orElseThrow(() -> new Exception("Usuario não encontrado"));
+			if (admnistrador != null) {
+				System.out.println("Bem-vindo administrador!");
+				System.out.println(administrador.toString());
 			}
+
 		}
 			catch(Exception e){
+				e.printStackTrace();
 				System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
 				menuInicial(5);
 			}
