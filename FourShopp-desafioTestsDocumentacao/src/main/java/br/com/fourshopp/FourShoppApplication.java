@@ -2,6 +2,8 @@ package br.com.fourshopp;
 
 import br.com.fourshopp.Util.UtilMenu;
 import br.com.fourshopp.entities.*;
+import br.com.fourshopp.repository.ChefeRepository;
+import br.com.fourshopp.repository.FuncionarioRepository;
 import br.com.fourshopp.repository.ProdutoRepository;
 import br.com.fourshopp.service.*;
 import ch.qos.logback.classic.pattern.Util;
@@ -38,6 +40,9 @@ public class FourShoppApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private ChefeRepository chefeRepository;
 
 	@Autowired
 	private FuncionarioService funcionarioService;
@@ -133,6 +138,23 @@ public class FourShoppApplication implements CommandLineRunner {
 			if (admnistrador != null) {
 				System.out.println("Bem-vindo administrador!");
 				System.out.println(administrador.toString());
+				
+				//método para criar o chefe
+				// Criar uma streing (sysout) fizendo que ele pode criar o chefe...
+				Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
+				this.chefeRepository.save(chefe);
+				ChefeService chefeService = new ChefeService();
+				//chefeService.save(chefe);
+				System.out.println(chefe.toString());
+				
+				//método para demitir (deletar) funcionário
+				System.out.println("Digite o id do funcionário que será desligado: ");
+				Long idFuncionario = scanner.nextLong();
+				operadorService.remove(idFuncionario);
+				
+				System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
+				
+				
 			}
 
 		}
@@ -141,6 +163,8 @@ public class FourShoppApplication implements CommandLineRunner {
 				System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
 				menuInicial(5);
 			}
+		
+
 		}
 
 		if (opcao == 3) {
