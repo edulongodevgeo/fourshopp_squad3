@@ -23,7 +23,7 @@ passo a passo que foi feito.
 
 1. ~~Menu para criação de produtos pelo chefe de seção.~~
 
-2. Apenas o chefe da seção pode alterar estoque e preço do produto.
+2. ~~Apenas o chefe da seção pode alterar estoque e preço do produto.~~
 
 3. Apenas o chefe da seção pode excluir os produtos.
 
