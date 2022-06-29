@@ -289,8 +289,8 @@ public class UtilMenu {
 		
 		System.out.println("Qual a carga horária: ");
 		int cargaHoraria = scanner.nextInt();
-
-		return new Operador(nome, email, celular, password, cpf, new Endereco(), data, Cargo.OPERADOR, salario, cargaHoraria);
+		Endereco endereco = new Endereco(rua, cidade, bairro, numero);
+		return new Operador(nome, email, celular, password, cpf, endereco, data, Cargo.OPERADOR, salario, cargaHoraria);
 	}
 	
 	//METODO CADASTRAR CHEFE

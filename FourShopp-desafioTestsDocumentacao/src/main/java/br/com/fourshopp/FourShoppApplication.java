@@ -261,7 +261,7 @@ public class FourShoppApplication implements CommandLineRunner {
 
 						if (opt == 4) {
 							Operador operador = UtilMenu.menuCadastrarOperador(scanner);
-							Operador operadorCriado = operadorService.create(operador);
+							Operador operadorCriado = operadorService.save(operador);
 							System.out.println("Foi cadastrado o " + operadorCriado.toString());
 							menuInicial(4);
 
