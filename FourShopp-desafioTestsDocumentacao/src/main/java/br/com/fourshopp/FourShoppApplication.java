@@ -258,7 +258,9 @@ public class FourShoppApplication implements CommandLineRunner {
 
 						if (opt == 4) {
 							Operador operador = UtilMenu.menuCadastrarOperador(scanner);
-							operadorService.create(operador);
+							Operador operadorCriado = operadorService.create(operador);
+							System.out.println("Foi cadastrado o " + operadorCriado.toString());
+							menuInicial(4);
 
 						}			
 						System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
