@@ -35,9 +35,9 @@ passo a passo que foi feito.
 
 ## Chamados para correções
 
-1. ~~Sistema pode aceitar apenas CPFs válido.~~ (REVISAR PR)
+1. ~~Sistema pode aceitar apenas CPFs válido.~~
 
-2. ~~Senha maior ou igual a 8 caracteres.~~ (REVISAR PR)
+2. ~~Senha maior ou igual a 8 caracteres.~~
 
 3. ~~O sistema se encontra sem tratamentos de exceções, ou seja, em campo que
 aceita apenas números , caso o usuário digite uma letra, o sistema encerra com
