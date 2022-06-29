@@ -204,7 +204,8 @@ public class FourShoppApplication implements CommandLineRunner {
 				} finally {
 					System.out.println("1 - Cadastrar produto");
 					System.out.println("2 - Alterar cadastro de produto");
-					System.out.println("3 - Cadastrar operadores");
+					System.out.println("3 - Deletar produto");
+					System.out.println("4 - Cadastrar operadores");
 					int opt = scanner.nextInt();
 
 //				Optional<Funcionario> chefe = this.funcionarioService.loadByEmailAndPassword(cpf, password);
@@ -242,8 +243,22 @@ public class FourShoppApplication implements CommandLineRunner {
 						System.out.println("O produto " + atualizado + " Foi alterado com sucesso");
 						menuInicial(4);
 					}
-
 					if (opt == 3) {
+						List<Produto> produtos = produtoService.listAll();
+						System.out.println("Informe o ID do produto que deseja deletar.");
+						for (int i = 0; i < produtos.size(); i++) {
+							System.out.println("Produto: " + produtos.get(i).toString());
+						}
+						Long itemId = scanner.nextLong();
+
+	
+						 produtoService.remove(itemId);
+
+						System.out.println("O produto foi deletado com sucesso");
+						menuInicial(4);
+					}
+
+					if (opt == 4) {
 						Operador operador = UtilMenu.menuCadastrarOperador(scanner);
 						operadorService.create(operador);
 
