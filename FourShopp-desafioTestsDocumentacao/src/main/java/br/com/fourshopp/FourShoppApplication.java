@@ -177,7 +177,75 @@ public class FourShoppApplication implements CommandLineRunner {
 				}
 				} catch (Exception e) {
 
-					e.printStackTrace();
+					System.out.println("Erro. Usuário não encontrado.");
+				} finally {
+					System.out.println("1 - Cadastrar produto");
+					System.out.println("2 - Alterar cadastro de produto");
+					System.out.println("3 - Deletar produto");
+					System.out.println("4 - Cadastrar operadores");
+					int opt = scanner.nextInt();
+
+//				Optional<Funcionario> chefe = this.funcionarioService.loadByEmailAndPassword(cpf, password);
+
+//				if (chefe.get().getCargo() != Cargo.CHEFE_SECAO) {
+//					System.out.println("Chefe nao encontrado!");
+//					menuInicial(4);
+//				} else {
+
+					if (opt == 1) {
+						// Método para Cadastrar Produto
+						Produto produto = UtilMenu.menuCadastrarProduto(scanner); // criamos no UtilMenu o método de
+																					// cadastrar produto
+						produtoService.create(produto);
+					}
+					if (opt == 2) {
+						List<Produto> produtos = produtoService.listAll();
+						System.out.println("Informe o ID do produto que deseja atualizar.");
+						for (int i = 0; i < produtos.size(); i++) {
+							System.out.println("Produto: " + produtos.get(i).toString());
+						}
+						Long itemId = scanner.nextLong();
+
+						Produto produto = new Produto();
+
+						try {
+							produto = UtilMenu.atualizarProduto(scanner);
+						} catch (ParseException e) {
+							System.err
+									.println("ERRO, não foi possivel atualizar o produto com as informações passadas.");
+							menuInicial(4);
+						}
+						Produto atualizado = produtoService.update(produto, itemId);
+
+						System.out.println("O produto " + atualizado + " Foi alterado com sucesso");
+						menuInicial(4);
+					}
+					if (opt == 3) {
+						List<Produto> produtos = produtoService.listAll();
+						System.out.println("Informe o ID do produto que deseja deletar.");
+						for (int i = 0; i < produtos.size(); i++) {
+							System.out.println("Produto: " + produtos.get(i).toString());
+						}
+						Long itemId = scanner.nextLong();
+
+	
+						 produtoService.remove(itemId);
+
+						System.out.println("O produto foi deletado com sucesso");
+						menuInicial(4);
+					}
+
+					if (opt == 4) {
+						Operador operador = UtilMenu.menuCadastrarOperador(scanner);
+						operadorService.create(operador);
+
+//					} else
+//						System.out.println("Opção inválida");
+//
+					}
+
+
+					
 					System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
 					menuInicial(5);
 				}
@@ -253,6 +321,7 @@ public class FourShoppApplication implements CommandLineRunner {
 				if (opcao == 5) {
 					System.out.println("Fechando a aplicação...");
 					System.exit(0);
+
 				}
 
 			}
