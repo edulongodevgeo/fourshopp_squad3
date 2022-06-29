@@ -23,13 +23,13 @@ passo a passo que foi feito.
 
 1. ~~Menu para criação de produtos pelo chefe de seção.~~
 
-2. Apenas o chefe da seção pode alterar estoque e preço do produto.
+2. ~~Apenas o chefe da seção pode alterar estoque e preço do produto.~~
 
 3. Apenas o chefe da seção pode excluir os produtos.
 
 4. ~~Administrador pode cadastrar novos chefes.~~
 
-5. Administrador pode demitir funcionário e tirá-lo da lista de funcionários do chefe.
+5. ~~Administrador pode demitir funcionário e tirá-lo da lista de funcionários do chefe.~~
 
 6. ~~Chefes de seção podem cadastrar seus operadores e definir carga horária.~~
 
