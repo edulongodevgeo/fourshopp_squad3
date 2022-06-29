@@ -1,5 +1,17 @@
 # fourshopp_squad3
 
+## Autores
+
+- [@edulongodevgeo](https://github.com/edulongodevgeo)
+- [@DenisMarostica](https://github.com/DenisMarostica)
+- [@mariana3000](https://github.com/mariana3000)
+- [@MateusHEsteves](https://github.com/MateusHEsteves)
+- [@PauloDK001](https://github.com/PauloDK001)
+- [@Tiago-Prudente](https://github.com/Tiago-Prudente)
+- [@johnrhodel](https://github.com/johnrhodel)
+- [@vxavier](https://github.com/vxavier)
+ 
+
 # Descritivo
 
 Foi desenvolvido um sistema por uma empresa parceira foursys, porém o contrato foi rompido e agora os funcionários da foursys irão se encarregar de completar o desenvolvimento do software. Foram abertos chamados de erros e validações no sistemas também para serem consertados.
