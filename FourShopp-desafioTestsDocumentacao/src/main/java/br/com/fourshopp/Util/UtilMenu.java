@@ -286,8 +286,11 @@ public class UtilMenu {
 
 		System.out.println("Insira o salário CLT bruto: ");
 		double salario = scanner.nextDouble();
+		
+		System.out.println("Qual a carga horária: ");
+		int cargaHoraria = scanner.nextInt();
 
-		return new Operador(nome, email, celular, password, cpf, new Endereco(), data, Cargo.OPERADOR, salario);
+		return new Operador(nome, email, celular, password, cpf, new Endereco(), data, Cargo.OPERADOR, salario, cargaHoraria);
 	}
 	
 	//METODO CADASTRAR CHEFE
