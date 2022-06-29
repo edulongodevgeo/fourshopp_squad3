@@ -381,4 +381,25 @@ public class UtilMenu {
 		Produto produto = new Produto(nome, quantidade, preco, setor, dataVencimentoFormatada);
 		return new Produto(nome, quantidade, preco, setor, dataVencimentoFormatada);
 	}
+
+	public static Produto atualizarProduto(Scanner scanner) throws ParseException {
+		scanner.nextLine();
+		System.out.println("Nome do produto: ");
+		String nome = scanner.nextLine();
+
+		System.out.println("Quantidade: ");
+		Integer quantidade = scanner.nextInt();
+
+		System.out.println("Preço: R$ ");
+		Double preco = scanner.nextDouble();
+		scanner.nextLine();
+		System.out.println("Data de vencimento: ");
+		String dataVencimento = scanner.nextLine();
+
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+		Date dataVencimentoFormatada = formato.parse(dataVencimento);
+
+		Produto produto = new Produto(nome, quantidade, preco, 1, dataVencimentoFormatada);
+		return produto;
+	}
 }
