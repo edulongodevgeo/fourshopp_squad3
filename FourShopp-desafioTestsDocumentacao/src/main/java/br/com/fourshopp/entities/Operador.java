@@ -37,6 +37,8 @@ public class Operador  extends Pessoa {
     @JoinColumn(name = "cd_pessoa")
     private Funcionario funcionario;
 
+    public Operador() {
+    }
     public Operador(String nome, String email, String celular, String password, String cpf, Endereco endereco, Date data, Cargo operador, double salario) {}
 
     public Operador(String nome, String email, String celular, String password, String cpf, Endereco endereco,

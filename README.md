@@ -25,7 +25,7 @@ passo a passo que foi feito.
 
 2. ~~Apenas o chefe da seção pode alterar estoque e preço do produto.~~
 
-3. Apenas o chefe da seção pode excluir os produtos.
+3. ~~Apenas o chefe da seção pode excluir os produtos.~~
 
 4. ~~Administrador pode cadastrar novos chefes.~~
 

@@ -6,6 +6,7 @@ import br.com.fourshopp.repository.ChefeRepository;
 import br.com.fourshopp.repository.FuncionarioRepository;
 import br.com.fourshopp.repository.ProdutoRepository;
 import br.com.fourshopp.service.*;
+import ch.qos.logback.classic.pattern.SyslogStartConverter;
 import ch.qos.logback.classic.pattern.Util;
 import br.com.fourshopp.entities.Administrador;
 
@@ -144,62 +145,38 @@ public class FourShoppApplication implements CommandLineRunner {
 
 			System.out.println("Insira sua password: ");
 			String password = scanner.next();
+
 			try {
-				Administrador admnistrador = this.administradorService.loadByCpfAndPassword(cpf, password)
-						.orElseThrow(() -> new Exception("Usuario não encontrado"));
+				Administrador admnistrador = this.administradorService.loadByCpfAndPassword(cpf, password).orElseThrow(() -> new Exception("Usuario não encontrado"));
 				if (admnistrador != null) {
 					System.out.println("Bem-vindo administrador!");
 					System.out.println(administrador.toString());
 
-					// método para criar o chefe
-					// Criar uma streing (sysout) fizendo que ele pode criar o chefe...
-					Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
-					this.chefeRepository.save(chefe);
-					ChefeService chefeService = new ChefeService();
-					// chefeService.save(chefe);
-					System.out.println(chefe.toString());
+					System.out.println("1- Cadastrar novo chefe " + "\n2- Demitir funcionário funcionário ");
+					int opcaoAdm = scanner.nextInt();
 
-					// método para demitir (deletar) funcionário
-					System.out.println("Digite o id do funcionário que será desligado: ");
-					Long idFuncionario = scanner.nextLong();
-					operadorService.remove(idFuncionario);
+					switch (opcaoAdm) {
 
-					System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
+						case 1:
+							Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
+							this.chefeRepository.save(chefe);
+							ChefeService chefeService = new ChefeService();
+							System.out.println(chefe.toString());
+							menuInicial(2);
+							break;
 
+						case 2:
+
+							System.out.println("Digite o id do funcionário que será desligado: ");
+							Long idFuncionario = scanner.nextLong();
+							operadorService.remove(idFuncionario);
+							System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
+							menuInicial(2);
+							break;
+					}
 				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.err
-						.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
-				menuInicial(5);
-			}
-
-		}
-
-		if (opcao == 3) {
-			Cliente cliente = menuCadastroCliente(scanner);
-			this.clienteService.create(cliente);
-			System.out.println("Bem-vindo, " + cliente.getNome());
-			menuInicial(1);
-		}
-
-		if (opcao == 4) {
-			System.out.println("Área do funcionário");
-
-			System.out.println("1- Chefe  " + "\n2- Operador ");
-			int escolhaCargo = scanner.nextInt();
-
-			System.out.println("Insira seu cpf: ");
-			String cpf = scanner.next();
-
-			System.out.println("Insira sua password: ");
-			String password = scanner.next();
-
-			if (escolhaCargo == 1) {
-				try {
-					this.funcionarioService.loadByEmailAndPassword(cpf, password);
 				} catch (Exception e) {
+
 					System.out.println("Erro. Usuário não encontrado.");
 				} finally {
 					System.out.println("1 - Cadastrar produto");
@@ -266,17 +243,86 @@ public class FourShoppApplication implements CommandLineRunner {
 //						System.out.println("Opção inválida");
 //
 					}
+
+
+					
+					System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
+					menuInicial(5);
 				}
 
-//			} else {
-//				Optional<Operador> operador = this.operadorService.loadByEmailAndPassword(cpf, password);
-//			}
+			}
+
+			if (opcao == 3) {
+				Cliente cliente = menuCadastroCliente(scanner);
+				this.clienteService.create(cliente);
+				System.out.println("Bem-vindo, " + cliente.getNome());
+				menuInicial(1);
+			}
+
+			if (opcao == 4) {
+				System.out.println("Área do funcionário");
+
+				System.out.println("1- Chefe  " + "\n2- Operador ");
+				int escolhaCargo = scanner.nextInt();
+
+				System.out.println("Insira seu cpf: ");
+				String cpf = scanner.next();
+
+				System.out.println("Insira sua password: ");
+				String password = scanner.next();
+
+				if (escolhaCargo == 1) {
+					try {
+						this.funcionarioService.loadByEmailAndPassword(cpf, password);
+					} catch (Exception e) {
+						System.out.println("Erro. Usuário não encontrado.");
+					} finally {
+						System.out.println("1 - Cadastrar produto");
+						System.out.println("2 - Alterar cadastro de produto");
+						System.out.println("3 - Cadastrar operadores");
+						int opt = scanner.nextInt();
+							if (opt == 1) {
+								// Método para Cadastrar Produto
+								Produto produto = UtilMenu.menuCadastrarProduto(scanner); // criamos no UtilMenu o método de
+								// cadastrar produto
+								produtoService.create(produto);
+							}
+							if (opt == 2) {
+								List<Produto> produtos = produtoService.listAll();
+								System.out.println("Informe o ID do produto que deseja atualizar.");
+								for (int i = 0; i < produtos.size(); i++) {
+									System.out.println("Produto: " + produtos.get(i).toString());
+								}
+								Long itemId = scanner.nextLong();
+
+								Produto produto = new Produto();
+
+								try {
+									produto = UtilMenu.atualizarProduto(scanner);
+								} catch (ParseException e) {
+									System.err.println("ERRO, não foi possivel atualizar o produto com as informações passadas.");
+									menuInicial(4);
+								}
+								Produto atualizado = produtoService.update(produto, itemId);
+
+								System.out.println("O produto " + atualizado + " Foi alterado com sucesso");
+								menuInicial(4);
+							}
+
+							if (opt == 3) {
+								Operador operador = UtilMenu.menuCadastrarOperador(scanner);
+								operadorService.create(operador);
+								menuInicial(4);
+							}
+
+						}
+					}
+				}
+				if (opcao == 5) {
+					System.out.println("Fechando a aplicação...");
+					System.exit(0);
+
+				}
+
 			}
 		}
-		if (opcao == 5) {
-			System.out.println("Fechando a aplicação...");
-			System.exit(0);
-		}
-
-	}
-}
