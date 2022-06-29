@@ -6,6 +6,7 @@ import br.com.fourshopp.repository.ChefeRepository;
 import br.com.fourshopp.repository.FuncionarioRepository;
 import br.com.fourshopp.repository.ProdutoRepository;
 import br.com.fourshopp.service.*;
+import ch.qos.logback.classic.pattern.SyslogStartConverter;
 import ch.qos.logback.classic.pattern.Util;
 import br.com.fourshopp.entities.Administrador;
 
@@ -150,33 +151,36 @@ public class FourShoppApplication implements CommandLineRunner {
 			if (admnistrador != null) {
 				System.out.println("Bem-vindo administrador!");
 				System.out.println(administrador.toString());
-				
-				//método para criar o chefe
-				// Criar uma streing (sysout) fizendo que ele pode criar o chefe...
-				Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
-				this.chefeRepository.save(chefe);
-				ChefeService chefeService = new ChefeService();
-				//chefeService.save(chefe);
-				System.out.println(chefe.toString());
-				
-				//método para demitir (deletar) funcionário
-				System.out.println("Digite o id do funcionário que será desligado: ");
-				Long idFuncionario = scanner.nextLong();
-				operadorService.remove(idFuncionario);
-				
-				System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
-				
-				
-			}
 
+				System.out.println("1- Cadastrar novo chefe " + "\n2- Demitir funcionário funcionário ");
+				int opcaoAdm = scanner.nextInt();
+
+				switch (opcaoAdm) {
+
+					case 1:
+						Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
+						this.chefeRepository.save(chefe);
+						ChefeService chefeService = new ChefeService();
+						System.out.println(chefe.toString());
+						menuInicial(2);
+						break;
+
+					case 2:
+
+						System.out.println("Digite o id do funcionário que será desligado: ");
+						Long idFuncionario = scanner.nextLong();
+						operadorService.remove(idFuncionario);
+						System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
+						menuInicial(2);
+						break;
+				}
+			}
 		}
 			catch(Exception e){
 				e.printStackTrace();
 				System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
 				menuInicial(5);
 			}
-		
-
 		}
 
 		if (opcao == 3) {
@@ -204,31 +208,17 @@ public class FourShoppApplication implements CommandLineRunner {
 				System.out.println("2 - Cadastrar operadores");
 				int opt = scanner.nextInt();
 
-//				Optional<Funcionario> chefe = this.funcionarioService.loadByEmailAndPassword(cpf, password);
-
-//				if (chefe.get().getCargo() != Cargo.CHEFE_SECAO) {
-//					System.out.println("Chefe nao encontrado!");
-//					menuInicial(4);
-//				} else {
-
 				if (opt == 1) {
-					// Método para Cadastrar Produto
-					Produto produto = UtilMenu.menuCadastrarProduto(scanner); // criamos no UtilMenu o método de
-																				// cadastrar produto
+					Produto produto = UtilMenu.menuCadastrarProduto(scanner);
+
 					produtoService.create(produto);
+					menuInicial(4);
 				}
 				if (opt == 2) {
 					Operador operador = UtilMenu.menuCadastrarOperador(scanner);
 					operadorService.create(operador);
-
-//					} else
-//						System.out.println("Opção inválida");
-//
+					menuInicial(4);
 				}
-
-//			} else {
-//				Optional<Operador> operador = this.operadorService.loadByEmailAndPassword(cpf, password);
-//			}
 			}
 		}
 		if (opcao == 5) {
