@@ -18,6 +18,7 @@ public class Funcionario extends Pessoa implements Serializable {
 
     private static final long serialVersionUID = -8563944577868369975L;
 
+
     @Temporal(TemporalType.DATE)
     @Column(name = "dt_hireDate")
     private Date dataContratacao;
