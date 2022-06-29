@@ -218,6 +218,9 @@ public class FourShoppApplication implements CommandLineRunner {
 							Produto produto = UtilMenu.menuCadastrarProduto(scanner); // criamos no UtilMenu o método de
 																						// cadastrar produto
 							produtoService.create(produto);
+							System.out.println("Produto cadastrado.");
+							menuInicial(4);
+							
 						}
 						if (opt == 2) {
 							List<Produto> produtos = produtoService.listAll();
