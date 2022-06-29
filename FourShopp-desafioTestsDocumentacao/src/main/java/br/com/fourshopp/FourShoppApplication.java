@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.*;
 import java.text.ParseException;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static br.com.fourshopp.Util.UtilMenu.*;
@@ -41,7 +40,7 @@ public class FourShoppApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
-	
+
 	@Autowired
 	private ChefeRepository chefeRepository;
 
@@ -70,10 +69,10 @@ public class FourShoppApplication implements CommandLineRunner {
 			String cpf = scanner.next();
 			System.out.println("Insira sua senha: ");
 			String password = scanner.next();
-		try {
-			this.cliente = clienteService.loadByEmailAndPassword(cpf, password)
-					.orElseThrow(() -> new ObjectNotFoundException(1L, "Cliente"));
-			}catch (ObjectNotFoundException e) {
+			try {
+				this.cliente = clienteService.loadByEmailAndPassword(cpf, password)
+						.orElseThrow(() -> new ObjectNotFoundException(1L, "Cliente"));
+			} catch (ObjectNotFoundException e) {
 				System.err.println("Usuario não encontrado. Faça o cadastro do cliente!");
 				menuInicial(3);
 			}
@@ -104,9 +103,8 @@ public class FourShoppApplication implements CommandLineRunner {
 					break;
 				}
 
-
 				// Atualiza estoque
-					Produto foundById = produtoService.findById(produto);
+				Produto foundById = produtoService.findById(produto);
 				if (foundById.getQuantidade() - quantidade >= 0) {
 					produtoService.diminuirEstoque(quantidade, foundById);
 
@@ -122,7 +120,8 @@ public class FourShoppApplication implements CommandLineRunner {
 						gerarCupomFiscal(cliente);
 						System.out.println("Gerando nota fiscal...");
 						System.err.println("Fechando a aplicação...");
-					} else System.out.println("Encerrando sistema.");
+					} else
+						System.out.println("Encerrando sistema.");
 				}
 			}
 		}
@@ -145,37 +144,36 @@ public class FourShoppApplication implements CommandLineRunner {
 
 			System.out.println("Insira sua password: ");
 			String password = scanner.next();
-		try {
-			Administrador admnistrador = this.administradorService.loadByCpfAndPassword(cpf, password).orElseThrow(() -> new Exception("Usuario não encontrado"));
-			if (admnistrador != null) {
-				System.out.println("Bem-vindo administrador!");
-				System.out.println(administrador.toString());
-				
-				//método para criar o chefe
-				// Criar uma streing (sysout) fizendo que ele pode criar o chefe...
-				Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
-				this.chefeRepository.save(chefe);
-				ChefeService chefeService = new ChefeService();
-				//chefeService.save(chefe);
-				System.out.println(chefe.toString());
-				
-				//método para demitir (deletar) funcionário
-				System.out.println("Digite o id do funcionário que será desligado: ");
-				Long idFuncionario = scanner.nextLong();
-				operadorService.remove(idFuncionario);
-				
-				System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
-				
-				
-			}
+			try {
+				Administrador admnistrador = this.administradorService.loadByCpfAndPassword(cpf, password)
+						.orElseThrow(() -> new Exception("Usuario não encontrado"));
+				if (admnistrador != null) {
+					System.out.println("Bem-vindo administrador!");
+					System.out.println(administrador.toString());
 
-		}
-			catch(Exception e){
+					// método para criar o chefe
+					// Criar uma streing (sysout) fizendo que ele pode criar o chefe...
+					Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
+					this.chefeRepository.save(chefe);
+					ChefeService chefeService = new ChefeService();
+					// chefeService.save(chefe);
+					System.out.println(chefe.toString());
+
+					// método para demitir (deletar) funcionário
+					System.out.println("Digite o id do funcionário que será desligado: ");
+					Long idFuncionario = scanner.nextLong();
+					operadorService.remove(idFuncionario);
+
+					System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
+
+				}
+
+			} catch (Exception e) {
 				e.printStackTrace();
-				System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
+				System.err
+						.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
 				menuInicial(5);
 			}
-		
 
 		}
 
@@ -199,10 +197,15 @@ public class FourShoppApplication implements CommandLineRunner {
 			String password = scanner.next();
 
 			if (escolhaCargo == 1) {
-				this.funcionarioService.loadByEmailAndPassword(cpf, password);
-				System.out.println("1 - Cadastrar produto");
-				System.out.println("2 - Cadastrar operadores");
-				int opt = scanner.nextInt();
+				try {
+					this.funcionarioService.loadByEmailAndPassword(cpf, password);
+				} catch (Exception e) {
+					System.out.println("Erro. Usuário não encontrado.");
+				} finally {
+					System.out.println("1 - Cadastrar produto");
+					System.out.println("2 - Alterar cadastro de produto");
+					System.out.println("3 - Cadastrar operadores");
+					int opt = scanner.nextInt();
 
 //				Optional<Funcionario> chefe = this.funcionarioService.loadByEmailAndPassword(cpf, password);
 
@@ -211,19 +214,43 @@ public class FourShoppApplication implements CommandLineRunner {
 //					menuInicial(4);
 //				} else {
 
-				if (opt == 1) {
-					// Método para Cadastrar Produto
-					Produto produto = UtilMenu.menuCadastrarProduto(scanner); // criamos no UtilMenu o método de
-																				// cadastrar produto
-					produtoService.create(produto);
-				}
-				if (opt == 2) {
-					Operador operador = UtilMenu.menuCadastrarOperador(scanner);
-					operadorService.create(operador);
+					if (opt == 1) {
+						// Método para Cadastrar Produto
+						Produto produto = UtilMenu.menuCadastrarProduto(scanner); // criamos no UtilMenu o método de
+																					// cadastrar produto
+						produtoService.create(produto);
+					}
+					if (opt == 2) {
+						List<Produto> produtos = produtoService.listAll();
+						System.out.println("Informe o ID do produto que deseja atualizar.");
+						for (int i = 0; i < produtos.size(); i++) {
+							System.out.println("Produto: " + produtos.get(i).toString());
+						}
+						Long itemId = scanner.nextLong();
+
+						Produto produto = new Produto();
+
+						try {
+							produto = UtilMenu.atualizarProduto(scanner);
+						} catch (ParseException e) {
+							System.err
+									.println("ERRO, não foi possivel atualizar o produto com as informações passadas.");
+							menuInicial(4);
+						}
+						Produto atualizado = produtoService.update(produto, itemId);
+
+						System.out.println("O produto " + atualizado + " Foi alterado com sucesso");
+						menuInicial(4);
+					}
+
+					if (opt == 3) {
+						Operador operador = UtilMenu.menuCadastrarOperador(scanner);
+						operadorService.create(operador);
 
 //					} else
 //						System.out.println("Opção inválida");
 //
+					}
 				}
 
 //			} else {
