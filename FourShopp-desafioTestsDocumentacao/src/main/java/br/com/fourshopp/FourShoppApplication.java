@@ -58,14 +58,56 @@ public class FourShoppApplication implements CommandLineRunner {
 	public void run(String[] args) throws Exception {
 
 		System.out.println("====== BEM-VINDO AO FOURSHOPP ======");
-		System.out.println("1- Sou cliente " + "\n2- Área do ADM " + "\n3- Seja um Cliente " + "\n4- Login funcionário "
-				+ "\n5- Encerrar ");
+		System.out.println("\n1- Sou cliente " 
+						+ "\n2- Área do ADM " 
+						+ "\n3- Seja um Cliente " 
+						+ "\n4- Login funcionário "
+						+ "\n5- Encerrar ");
 		int opcao = scanner.nextInt();
 		menuInicial(opcao);
 	}
 
 	public void menuInicial(int opcao) throws CloneNotSupportedException, IOException, ParseException {
+				
+		if (opcao == 0) {
+			System.out.println("====== BEM-VINDO AO FOURSHOPP ======");
+			System.out.println("\n1- Sou cliente " 
+							+ "\n2- Área do ADM " 
+							+ "\n3- Seja um Cliente " 
+							+ "\n4- Login funcionário "
+							+ "\n5- Encerrar ");
+			int opcaoMenu = scanner.nextInt();
+			
+			if (opcaoMenu == 1) {
+				System.out.println("\n1- Sou cliente ");
+				menuInicial(1);
+			}
+			
+			if (opcaoMenu == 2) {
+				System.out.println("\n2- Área do ADM ");
+				menuInicial(2);
+			}
+			
+			if (opcaoMenu == 3) {
+				System.out.println("\n3- Seja um Cliente ");
+				menuInicial(3);
+			}
+			
+			if (opcaoMenu == 4) {
+				System.out.println("\n4- Login funcionário");
+				menuInicial(4);
+			}
+			
+			if (opcaoMenu == 5) {
+				System.out.println("\n5- Encerrar ");
+				menuInicial(5);
+			}
+
+		}
+		
 		if (opcao == 1) {
+			System.out.println("\nBem-vindo, cliente! \nFaça seu login. ");
+			System.out.println("");
 			System.out.println("Insira seu cpf: ");
 			String cpf = scanner.next();
 			System.out.println("Insira sua senha: ");
@@ -75,11 +117,24 @@ public class FourShoppApplication implements CommandLineRunner {
 						.orElseThrow(() -> new ObjectNotFoundException(1L, "Cliente"));
 			} catch (ObjectNotFoundException e) {
 				System.err.println("Usuario não encontrado. Faça o cadastro do cliente!");
-				menuInicial(3);
+				
+				System.out.println("Digite: \n1 - Cadastrar funcionário \n2- Retornar ao Menu Principal");
+				int opcaoMenuCliente = scanner.nextInt();
+
+				if (opcaoMenuCliente == 1) {
+					Cliente cliente = menuCadastroCliente(scanner);
+					this.clienteService.create(cliente);
+					System.out.println("Bem-vindo, " + cliente.getNome());
+					//menuInicial(3);
+				}
+				if (opcaoMenuCliente == 2) {
+					menuInicial(0);
+				}
 			}
 
 			int contador = 1;
 			while (contador == 1) {
+				System.out.println("");
 				System.out.println("Escolha o setor: ");
 				int setor = menuSetor(scanner);
 
@@ -147,7 +202,8 @@ public class FourShoppApplication implements CommandLineRunner {
 			String password = scanner.next();
 
 			try {
-				Administrador admnistrador = this.administradorService.loadByCpfAndPassword(cpf, password).orElseThrow(() -> new Exception("Usuario não encontrado"));
+				Administrador admnistrador = this.administradorService.loadByCpfAndPassword(cpf, password)
+						.orElseThrow(() -> new Exception("Usuario não encontrado"));
 				if (admnistrador != null) {
 					System.out.println("Bem-vindo administrador!");
 					System.out.println(administrador.toString());
@@ -157,125 +213,147 @@ public class FourShoppApplication implements CommandLineRunner {
 
 					switch (opcaoAdm) {
 
-						case 1:
-							Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
-							this.chefeRepository.save(chefe);
-							ChefeService chefeService = new ChefeService();
-							System.out.println(chefe.toString());
-							menuInicial(2);
-							break;
+					case 1:
+						Chefe chefe = UtilMenu.menuCadastrarChefe(scanner);
+						this.chefeRepository.save(chefe);
+						ChefeService chefeService = new ChefeService();
+						System.out.println(chefe.toString());
+						menuInicial(2);
+						break;
 
-						case 2:
+					case 2:
 
-							System.out.println("Digite o id do funcionário que será desligado: ");
-							Long idFuncionario = scanner.nextLong();
-							operadorService.remove(idFuncionario);
-							System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
-							menuInicial(2);
-							break;
+						System.out.println("Digite o id do funcionário que será desligado: ");
+						Long idFuncionario = scanner.nextLong();
+						operadorService.remove(idFuncionario);
+						System.out.println("Parabéns, o funcionário foi desligado com sucesso!");
+						menuInicial(2);
+						break;
 					}
 				}
+			} catch (Exception e) {
+
+				System.out.println("Erro. Usuário não encontrado.");
+			}
+
+		}
+
+		if (opcao == 3) {
+			Cliente cliente = menuCadastroCliente(scanner);
+			this.clienteService.create(cliente);
+			System.out.println("Bem-vindo, " + cliente.getNome());
+			menuInicial(1);
+		}
+
+		if (opcao == 4) {
+			System.out.println("Área do funcionário");
+
+			System.out.println("1- Chefe  " 
+								+ "\n2- Operador " 
+								+ "\n3 - Encerrar"
+								+ "\n4 - Retornar ao menu");
+			int escolhaCargo = scanner.nextInt();
+
+			System.out.println("Insira seu cpf: ");
+			String cpf = scanner.next();
+
+			System.out.println("Insira sua password: ");
+			String password = scanner.next();
+
+			if (escolhaCargo == 1) {
+				try {
+					this.funcionarioService.loadByEmailAndPassword(cpf, password);
 				} catch (Exception e) {
-
 					System.out.println("Erro. Usuário não encontrado.");
-				} 
+				} finally {
+					System.out.println("1 - Cadastrar produto");
+					System.out.println("2 - Alterar cadastro de produto");
+					System.out.println("3 - Deletar produto");
+					System.out.println("4 - Cadastrar operadores");
+					System.out.println("5 - Retornar ao menu");
+					int opt = scanner.nextInt();
 
-			}
+					if (opt == 1) {
+						// Método para Cadastrar Produto
+						Produto produto = UtilMenu.menuCadastrarProduto(scanner); // criamos no UtilMenu o método de
+																					// cadastrar produto
+						produtoService.create(produto);
+						System.out.println("Produto cadastrado.");
+						menuInicial(4);
 
-			if (opcao == 3) {
-				Cliente cliente = menuCadastroCliente(scanner);
-				this.clienteService.create(cliente);
-				System.out.println("Bem-vindo, " + cliente.getNome());
-				menuInicial(1);
-			}
-
-			if (opcao == 4) {
-				System.out.println("Área do funcionário");
-
-				System.out.println("1- Chefe  " + "\n2- Operador ");
-				int escolhaCargo = scanner.nextInt();
-
-				System.out.println("Insira seu cpf: ");
-				String cpf = scanner.next();
-
-				System.out.println("Insira sua password: ");
-				String password = scanner.next();
-
-				if (escolhaCargo == 1) {
-					try {
-						this.funcionarioService.loadByEmailAndPassword(cpf, password);
-					} catch (Exception e) {
-						System.out.println("Erro. Usuário não encontrado.");
-					} finally {
-						System.out.println("1 - Cadastrar produto");
-						System.out.println("2 - Alterar cadastro de produto");
-						System.out.println("3 - Deletar produto");
-						System.out.println("4 - Cadastrar operadores");
-						int opt = scanner.nextInt();
-
-						if (opt == 1) {
-							// Método para Cadastrar Produto
-							Produto produto = UtilMenu.menuCadastrarProduto(scanner); // criamos no UtilMenu o método de
-																						// cadastrar produto
-							produtoService.create(produto);
-							System.out.println("Produto cadastrado.");
-							menuInicial(4);
-							
-						}
-						if (opt == 2) {
-							List<Produto> produtos = produtoService.listAll();
-							System.out.println("Informe o ID do produto que deseja atualizar.");
-							for (int i = 0; i < produtos.size(); i++) {
-								System.out.println("Produto: " + produtos.get(i).toString());
-							}
-							Long itemId = scanner.nextLong();
-
-							Produto produto = new Produto();
-
-							try {
-								produto = UtilMenu.atualizarProduto(scanner);
-							} catch (ParseException e) {
-								System.err
-										.println("ERRO, não foi possivel atualizar o produto com as informações passadas.");
-								menuInicial(4);
-							}
-							Produto atualizado = produtoService.update(produto, itemId);
-
-							System.out.println("O produto " + atualizado + " Foi alterado com sucesso");
-							menuInicial(4);
-						}
-						if (opt == 3) {
-							List<Produto> produtos = produtoService.listAll();
-							System.out.println("Informe o ID do produto que deseja deletar.");
-							for (int i = 0; i < produtos.size(); i++) {
-								System.out.println("Produto: " + produtos.get(i).toString());
-							}
-							Long itemId = scanner.nextLong();
-
-		
-							 produtoService.remove(itemId);
-
-							System.out.println("O produto foi deletado com sucesso");
-							menuInicial(4);
-						}
-
-						if (opt == 4) {
-							Operador operador = UtilMenu.menuCadastrarOperador(scanner);
-							Operador operadorCriado = operadorService.save(operador);
-							System.out.println("Foi cadastrado o " + operadorCriado.toString());
-							menuInicial(4);
-
-						}			
-						System.err.println("Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
-						menuInicial(5);
 					}
+					if (opt == 2) {
+						List<Produto> produtos = produtoService.listAll();
+						System.out.println("Informe o ID do produto que deseja atualizar.");
+						for (int i = 0; i < produtos.size(); i++) {
+							System.out.println("Produto: " + produtos.get(i).toString());
+						}
+						Long itemId = scanner.nextLong();
+
+						Produto produto = new Produto();
+
+						try {
+							produto = UtilMenu.atualizarProduto(scanner);
+						} catch (ParseException e) {
+							System.err
+									.println("ERRO, não foi possivel atualizar o produto com as informações passadas.");
+							menuInicial(4);
+						}
+						Produto atualizado = produtoService.update(produto, itemId);
+
+						System.out.println("O produto " + atualizado + " Foi alterado com sucesso");
+						menuInicial(4);
 					}
-				}
-				if (opcao == 5) {
-					System.out.println("Fechando a aplicação...");
-					System.exit(0);
+					if (opt == 3) {
+						List<Produto> produtos = produtoService.listAll();
+						System.out.println("Informe o ID do produto que deseja deletar.");
+						for (int i = 0; i < produtos.size(); i++) {
+							System.out.println("Produto: " + produtos.get(i).toString());
+						}
+						Long itemId = scanner.nextLong();
 
-				}
+						produtoService.remove(itemId);
 
+						System.out.println("O produto foi deletado com sucesso");
+						menuInicial(4);
+					}
+
+					if (opt == 4) {
+						Operador operador = UtilMenu.menuCadastrarOperador(scanner);
+						Operador operadorCriado = operadorService.save(operador);
+						System.out.println("Foi cadastrado o " + operadorCriado.toString());
+						menuInicial(4);
+
+					}
+					if (opt == 5) {
+						menuInicial(0);
+
+					}
+					
+					System.err.println(
+							"Usuario não encontrado! Devido a sugurança do sistema, estamos fechando o sistema.");
+					// Retornar para um menu inicial...
+					menuInicial(0);
+				}
+			}
+			if (escolhaCargo == 2) {
+				System.out.println("Olá! Bem-vindo a área do Operador! \nÁrea em desenvolvimento...\n");
+				menuInicial(4);
+			}
+			if (escolhaCargo == 3) {
+				System.out.println("\nEncerrar!");
+				menuInicial(5);
+			}
+			if (escolhaCargo == 4) {
+				menuInicial(0);
 			}
 		}
+
+		if (opcao == 5) {
+			System.out.println("Fechando a aplicação...");
+			System.exit(0);
+
+		}
+
+	}
+}
